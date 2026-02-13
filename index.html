@@ -904,37 +904,35 @@ filter: drop-shadow(0 0 15px rgba(255,215,0,0.8));
 
         // ========== MUSIC CONTROLLER ==========
     <script>
-    const music = document.getElementById('bgMusic');
-    const musicBtn = document.getElementById('musicToggle');
+    const music = document.getElementById("bgMusic");
+    const toggle = document.getElementById("musicToggle");
     
     music.volume = 0.4;
-    const startTime = 11;
+    music.currentTime = 11;
     
     let started = false;
     
-    // Try muted autoplay
-    music.currentTime = startTime;
-    music.play().catch(()=>{});
-    
-    // First interaction unlocks audio
-    function unlockAudio() {
-        if (started) return;
+    /* FIRST USER TAP ANYWHERE STARTS AUDIO */
+    function startAudioFromGesture(e){
+        if(started) return;
     
         music.muted = false;
-        music.currentTime = startTime;
-        music.play().catch(()=>{});
-        started = true;
+        music.play().then(()=>{
+            started = true;
+            console.log("Audio started by real gesture");
+        }).catch(err=>{
+            console.log("Blocked:", err);
+        });
     }
     
-    document.addEventListener("click", unlockAudio);
-    document.addEventListener("touchstart", unlockAudio);
-    document.addEventListener("mousemove", unlockAudio);
+    /* Must be pointerdown — modern browsers require this */
+    document.body.addEventListener("pointerdown", startAudioFromGesture, {once:true});
     
-    // Toggle button
-    musicBtn.addEventListener("click", function(e){
+    /* Button toggle */
+    toggle.addEventListener("click", (e)=>{
         e.stopPropagation();
     
-        if (music.paused) {
+        if(music.paused){
             music.play();
         } else {
             music.pause();
