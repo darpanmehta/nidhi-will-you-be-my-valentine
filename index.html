@@ -802,7 +802,7 @@ filter: drop-shadow(0 0 15px rgba(255,215,0,0.8));
         console.log('%c🧸 The teddy is rooting for you!', 'font-size: 14px; color: #a855f7;');
     </script>   
     <!-- Background Music -->
-    <audio id="bgMusic" loop preload="auto" muted autoplay playsinline>
+    <audio id="bgMusic" loop preload="auto" muted playsinline>
         <source src="Where-Is-My-Husband.mp3" type="audio/mpeg">
     </audio>
 
@@ -902,7 +902,6 @@ filter: drop-shadow(0 0 15px rgba(255,215,0,0.8));
         }
     </style>
 
-    <script>
         // ========== MUSIC CONTROLLER ==========
     <script>
     const music = document.getElementById('bgMusic');
@@ -913,17 +912,17 @@ filter: drop-shadow(0 0 15px rgba(255,215,0,0.8));
     
     let started = false;
     
-    // Try autoplay muted
+    // Try muted autoplay
     music.currentTime = startTime;
     music.play().catch(()=>{});
     
-    // When user touches anywhere → unmute
+    // First interaction unlocks audio
     function unlockAudio() {
         if (started) return;
     
         music.muted = false;
         music.currentTime = startTime;
-        music.play();
+        music.play().catch(()=>{});
         started = true;
     }
     
@@ -932,7 +931,7 @@ filter: drop-shadow(0 0 15px rgba(255,215,0,0.8));
     document.addEventListener("mousemove", unlockAudio);
     
     // Toggle button
-    musicBtn.addEventListener("click", (e)=>{
+    musicBtn.addEventListener("click", function(e){
         e.stopPropagation();
     
         if (music.paused) {
